@@ -28,7 +28,9 @@
 
         <activity
             android:name=".ui.MainActivity"
-            android:label="@string/title_activity_my_garden">
+            android:label="@string/title_activity_my_garden"
+            android:launchMode="singleTop"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -36,7 +38,15 @@
         </activity>
         <activity
             android:name=".ui.PlantDetailActivity"
-            android:label="@string/title_activity_plant_detail" />
+            android:label="@string/title_activity_plant_detail"
+            android:parentActivityName=".ui.MainActivity" >
+            <!-- The meta-data element is needed for versions lower than 4.1 -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.MainActivity"/>
+
+             />
+        </activity>
         <activity
             android:name=".ui.AddPlantActivity"
             android:label="@string/title_activity_add_plant" />

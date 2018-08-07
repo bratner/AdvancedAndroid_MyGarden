@@ -25,6 +25,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,10 +40,10 @@ public class PlantContentProvider extends ContentProvider {
     // and related ints (101, 102, ..) for items in that directory.
     public static final int PLANTS = 100;
     public static final int PLANT_WITH_ID = 101;
+    public static String TAG = PlantContentProvider.class.getSimpleName();
 
     // Declare a static variable for the Uri matcher that you construct
     private static final UriMatcher sUriMatcher = buildUriMatcher();
-    private static final String TAG = PlantContentProvider.class.getName();
 
     // Define a static buildUriMatcher method that associates URI's with their int match
     public static UriMatcher buildUriMatcher() {
@@ -124,6 +125,7 @@ public class PlantContentProvider extends ContentProvider {
         switch (match) {
             // Query for the plants directory
             case PLANTS:
+                Log.d(TAG, "query all plants.");
                 retCursor = db.query(PlantEntry.TABLE_NAME,
                         projection,
                         selection,
@@ -134,6 +136,7 @@ public class PlantContentProvider extends ContentProvider {
                 break;
             case PLANT_WITH_ID:
                 String id = uri.getPathSegments().get(1);
+                Log.d(TAG, "query for plantId "+id);
                 retCursor = db.query(PlantEntry.TABLE_NAME,
                         projection,
                         "_id=?",
@@ -209,12 +212,14 @@ public class PlantContentProvider extends ContentProvider {
         switch (match) {
             case PLANTS:
                 plantsUpdated = db.update(PlantEntry.TABLE_NAME, values, selection, selectionArgs);
+                Log.d(TAG, "Update all plants");
                 break;
             case PLANT_WITH_ID:
                 if (selection == null) selection = PlantEntry._ID + "=?";
                 else selection += " AND " + PlantEntry._ID + "=?";
                 // Get the place ID from the URI path
                 String id = uri.getPathSegments().get(1);
+                Log.d(TAG, "Upating plant with id "+id);
                 // Append any existing selection options to the ID filter
                 if (selectionArgs == null) selectionArgs = new String[]{id};
                 else {
