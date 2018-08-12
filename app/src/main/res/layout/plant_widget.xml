@@ -19,6 +19,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:layout_width="50dp"
+    tools:layout_height="140dp"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
@@ -28,7 +30,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/water_drop_blue"
-        android:layout_weight="1"/>
+        android:layout_weight="0"
+       android:padding="8dp"/>
 
     <ImageView
         android:id="@+id/widget_plant_image"
@@ -36,22 +39,26 @@
         android:layout_height="wrap_content"
         android:scaleType="fitCenter"
         android:layout_gravity="center"
-        android:layout_weight="10"
+        android:layout_weight="4"
         android:src="@drawable/grass"
-        android:layout_marginBottom="0dp"
-        android:paddingBottom="0dp"/>
+        tools:src="@drawable/cactus_2"
+
+
+
+        />
 
     <!-- done (4) Add a new TextView in plant_widget and set it to show the plant ID -->
     <TextView
-        android:layout_marginTop="0dp"
+        android:layout_margin="8dp"
         android:id="@+id/widget_plant_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        tools:text="LALAS"
+        tools:text="12"
         android:background="#88FFFFFF"
-        android:layout_weight="1"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+        android:layout_weight="0"
+        android:textStyle="bold"
+
         />
 
 </LinearLayout>

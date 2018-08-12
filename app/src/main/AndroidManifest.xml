@@ -39,12 +39,12 @@
         <activity
             android:name=".ui.PlantDetailActivity"
             android:label="@string/title_activity_plant_detail"
-            android:parentActivityName=".ui.MainActivity" >
+            android:parentActivityName=".ui.MainActivity"
+            >
             <!-- The meta-data element is needed for versions lower than 4.1 -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.MainActivity"/>
-
              />
         </activity>
         <activity

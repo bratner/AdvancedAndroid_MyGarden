@@ -21,6 +21,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -33,6 +34,11 @@ public class PlantWidgetProvider extends AppWidgetProvider {
 
     public static String TAG = PlantWidgetProvider.class.getSimpleName();
     // setImageViewResource to update the widget’s image
+    public PlantWidgetProvider() {
+        super();
+        Log.d(TAG, "Constructor");
+    }
+
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int imgRes, long plantId, boolean water, int appWidgetId) {
 
@@ -63,8 +69,13 @@ public class PlantWidgetProvider extends AppWidgetProvider {
             views.setViewVisibility(R.id.widget_water_button, View.INVISIBLE);
             views.setTextViewText(R.id.widget_plant_text, "");
         }
-        Log.d(TAG, "pending intent for plant image click to plant id "+intent.getExtras().toString());
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        //Log.d(TAG, "pending intent for plant image click to plant id "+intent.getExtras().toString());
+
+        PendingIntent pendingIntent = TaskStackBuilder.create(context)
+                .addNextIntentWithParentStack(intent)
+                .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
         views.setOnClickPendingIntent(R.id.widget_plant_image, pendingIntent);
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -72,6 +83,7 @@ public class PlantWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        Log.d(TAG, "onUpdate() with "+appWidgetIds.length+" widgets.");
         //Start the intent service update widget action, the service takes care of updating the widgets UI
         PlantWateringService.startActionUpdatePlantWidgets(context);
     }
@@ -80,6 +92,7 @@ public class PlantWidgetProvider extends AppWidgetProvider {
     // to show/hide the water button
     public static void updatePlantWidgets(Context context, AppWidgetManager appWidgetManager,
                                           int imgRes, long plantId, boolean water, int[] appWidgetIds) {
+        Log.d(TAG, "updatePlantWidgets() for plantId "+plantId+" water "+water);
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, imgRes, plantId, water, appWidgetId);
         }
@@ -87,16 +100,19 @@ public class PlantWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
+        Log.d(TAG, "onDeleted() with "+appWidgetIds.length+" widgets.");
         // Perform any action when one or more AppWidget instances have been deleted
     }
 
     @Override
     public void onEnabled(Context context) {
+        Log.d(TAG, "onEnabled()");
         // Perform any action when an AppWidget for this provider is instantiated
     }
 
     @Override
     public void onDisabled(Context context) {
+        Log.d(TAG, "onDisabled()");
         // Perform any action when the last AppWidget instance for this provider is deleted
     }
 

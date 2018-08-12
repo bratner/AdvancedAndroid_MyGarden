@@ -75,14 +75,17 @@ public class PlantDetailActivity extends AppCompatActivity
         cursor.moveToFirst();
         long lastWatered = cursor.getLong(cursor.getColumnIndex(PlantContract.PlantEntry.COLUMN_LAST_WATERED_TIME));
         long timeNow = System.currentTimeMillis();
-        if ((timeNow - lastWatered) > PlantUtils.MAX_AGE_WITHOUT_WATER)
+        if ((timeNow - lastWatered) > PlantUtils.MAX_AGE_WITHOUT_WATER) {
+            Log.d(TAG, "Plant "+mPlantId+" is too dead to water");
             return; // plant already dead
+        }
+        cursor.close();
 
         ContentValues contentValues = new ContentValues();
         // Update the watered timestamp
         contentValues.put(PlantContract.PlantEntry.COLUMN_LAST_WATERED_TIME, timeNow);
         getContentResolver().update(SINGLE_PLANT_URI, contentValues, null, null);
-        cursor.close();
+
         PlantWateringService.startActionUpdatePlantWidgets(this);
     }
 

@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.util.Log;
 
 import com.example.android.mygarden.provider.PlantContract;
 import com.example.android.mygarden.ui.PlantDetailActivity;
@@ -38,6 +39,8 @@ import static com.example.android.mygarden.provider.PlantContract.PATH_PLANTS;
  * a service on a separate handler thread.
  */
 public class PlantWateringService extends IntentService {
+
+    public static final String TAG = PlantWateringService.class.getSimpleName();
 
     // done (1): Change ACTION_WATER_PLANTS to ACTION_WATER_PLANT and
     // use EXTRA_PLANT_ID to pass the plant ID to the service and update the query to use SINGLE_PLANT_URI
@@ -57,6 +60,7 @@ public class PlantWateringService extends IntentService {
     public static void startActionWaterPlant(Context context, long plantId) {
         Intent intent = new Intent(context, PlantWateringService.class);
         intent.setAction(ACTION_WATER_PLANT);
+        intent.putExtra(PlantDetailActivity.EXTRA_PLANT_ID, plantId);
         context.startService(intent);
     }
 
@@ -94,18 +98,21 @@ public class PlantWateringService extends IntentService {
      */
     private void handleActionWaterPlant(long plantId) {
 
-        Uri PLANTS_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_PLANTS).appendPath(String.valueOf(plantId)).build();
+        Uri PLANT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_PLANTS).appendPath(String.valueOf(plantId)).build();
         ContentValues contentValues = new ContentValues();
         long timeNow = System.currentTimeMillis();
         contentValues.put(PlantContract.PlantEntry.COLUMN_LAST_WATERED_TIME, timeNow);
-        // Update only plants that are still alive
+        // Update only plants that are still alived
+        Log.d(TAG, "Watering plant "+plantId+" using content uri "+PLANT_URI);
         if (plantId != INVALID_PLANT_ID) {
-            getContentResolver().update(
-                    PLANTS_URI,
+            int ret = getContentResolver().update(
+                    PLANT_URI,
                     contentValues,
-                    PlantContract.PlantEntry.COLUMN_LAST_WATERED_TIME + ">?",
-                    new String[]{String.valueOf(timeNow - PlantUtils.MAX_AGE_WITHOUT_WATER)});
+                    null,
+                    null);
+
         }
+        handleActionUpdatePlantWidgets();
     }
 
 
@@ -114,6 +121,7 @@ public class PlantWateringService extends IntentService {
      */
     private void handleActionUpdatePlantWidgets() {
         //Query to get the plant that's most in need for water (last watered)
+        Log.d(TAG, "handleActionUpdatePlantWidgets()");
         Uri PLANT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_PLANTS).build();
         Cursor cursor = getContentResolver().query(
                 PLANT_URI,
@@ -148,5 +156,6 @@ public class PlantWateringService extends IntentService {
                 plantId,
                 water,
                 appWidgetIds);
+
     }
 }

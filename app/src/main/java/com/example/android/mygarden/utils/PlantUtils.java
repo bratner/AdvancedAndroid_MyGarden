@@ -1,19 +1,19 @@
 package com.example.android.mygarden.utils;
 
-/*
-* Copyright (C) 2017 The Android Open Source Project
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*  	http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
+        /*
+        * Copyright (C) 2017 The Android Open Source Project
+        *
+        * Licensed under the Apache License, Version 2.0 (the "License");
+        * you may not use this file except in compliance with the License.
+        * You may obtain a copy of the License at
+        *
+        *  	http://www.apache.org/licenses/LICENSE-2.0
+        *
+        * Unless required by applicable law or agreed to in writing, software
+        * distributed under the License is distributed on an "AS IS" BASIS,
+        * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        * See the License for the specific language governing permissions and
+        * limitations under the License.
 */
 
 import android.content.Context;
@@ -28,9 +28,9 @@ public class PlantUtils {
     private static final long HOUR_MILLISECONDS = MINUTE_MILLISECONDS * 60;
     private static final long DAY_MILLISECONDS = HOUR_MILLISECONDS * 24;
 
-    public static final long MIN_AGE_BETWEEN_WATER = 60*1000;//HOUR_MILLISECONDS * 2; // can water every 2 hours
+    public static final long MIN_AGE_BETWEEN_WATER = 60*1000;//HOUR_MILLISECONDS * 2; // can water every 1 min
     static final long DANGER_AGE_WITHOUT_WATER = HOUR_MILLISECONDS * 6; // in danger after 6 hours
-    public static final long MAX_AGE_WITHOUT_WATER = HOUR_MILLISECONDS * 12; // plants die after 12 hours
+    public static final long MAX_AGE_WITHOUT_WATER = HOUR_MILLISECONDS * 24 * 100; // plants die after 100 days
     static final long TINY_AGE = DAY_MILLISECONDS * 0; // plants start tiny
     static final long JUVENILE_AGE = DAY_MILLISECONDS * 1; // 1 day old
     static final long FULLY_GROWN_AGE = DAY_MILLISECONDS * 2; // 2 days old

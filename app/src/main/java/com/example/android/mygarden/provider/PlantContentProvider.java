@@ -208,6 +208,7 @@ public class PlantContentProvider extends ContentProvider {
         int match = sUriMatcher.match(uri);
         // Keep track of the number of updated plants
         int plantsUpdated;
+        Log.d(TAG, "update() for uri "+uri);
 
         switch (match) {
             case PLANTS:
@@ -221,8 +222,9 @@ public class PlantContentProvider extends ContentProvider {
                 String id = uri.getPathSegments().get(1);
                 Log.d(TAG, "Upating plant with id "+id);
                 // Append any existing selection options to the ID filter
-                if (selectionArgs == null) selectionArgs = new String[]{id};
-                else {
+                if (selectionArgs == null) {
+                    selectionArgs = new String[]{id};
+                } else {
                     ArrayList<String> selectionArgsList = new ArrayList<String>();
                     selectionArgsList.addAll(Arrays.asList(selectionArgs));
                     selectionArgsList.add(id);
