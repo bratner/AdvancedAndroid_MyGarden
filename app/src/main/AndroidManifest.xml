@@ -21,7 +21,7 @@
 
         <service android:name=".PlantWateringService" />
 
-        <!-- TODO (1): Create a new layout called widget_grid_view.xml that contains a GridView and
+        <!-- Done (1): Create a new layout called widget_grid_view.xml that contains a GridView and
         another fallback RelativeLayout for empty gardens -->
 
         <!-- TODO (2): Create a RemoteViewsService class and a RemoteViewsFactory class with:
