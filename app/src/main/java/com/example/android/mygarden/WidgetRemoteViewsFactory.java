@@ -1,12 +1,17 @@
 package com.example.android.mygarden;
 
 
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
+import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 import com.example.android.mygarden.provider.PlantContract;
+import com.example.android.mygarden.ui.PlantDetailActivity;
 import com.example.android.mygarden.utils.PlantUtils;
 
 
@@ -74,14 +79,23 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
         int plantType = mCursor.getInt(plantTypeIndex);
 
 
-        boolean canWater = (timeNow - wateredAt) > PlantUtils.MIN_AGE_BETWEEN_WATER &&
+        boolean needsWater = (timeNow - wateredAt) > PlantUtils.MIN_AGE_BETWEEN_WATER &&
                 (timeNow - wateredAt) < PlantUtils.MAX_AGE_WITHOUT_WATER;
         int imgRes = PlantUtils.getPlantImageRes(mContext, timeNow - createdAt, timeNow - wateredAt, plantType);
 
         RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.plant_widget);
 
+        views.setImageViewResource(R.id.widget_plant_image, imgRes);
+        // Update plant ID text
+        views.setTextViewText(R.id.widget_plant_name, String.valueOf(plantId));
+        // Show/Hide the water drop button
+        if (needsWater) views.setViewVisibility(R.id.widget_water_button, View.VISIBLE);
 
-
+        Bundle params = new Bundle();
+        params.putLong(PlantDetailActivity.EXTRA_PLANT_ID, plantId);
+        Intent fillIntent = new Intent();
+        fillIntent.putExtras(params);
+        views.setOnClickFillInIntent(R.id.widget_plant_image, fillIntent);
 
         return views;
     }

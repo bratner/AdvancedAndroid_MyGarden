@@ -32,6 +32,19 @@ import com.example.android.mygarden.ui.PlantDetailActivity;
 
 public class PlantWidgetProvider extends AppWidgetProvider {
 
+    private static RemoteViews getGardenGridRemoteView(Context context) {
+
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_grid_view);
+        Intent gridIntentServiceCall = new Intent(context, WidgetRemoteViewsService.class);
+        views.setRemoteAdapter(R.id.widget_grid_view, gridIntentServiceCall);
+
+        Intent showPlantDetails = new Intent(context, PlantDetailActivity.class);
+        PendingIntent pi = PendingIntent.getActivity(context, 0, showPlantDetails, PendingIntent.FLAG_UPDATE_CURRENT);
+        views.setPendingIntentTemplate(R.id.widget_grid_view, pi);
+
+        views.setEmptyView(R.id.widget_grid_view, R.id.empty_view);
+        return null;
+    }
     // setImageViewResource to update the widget’s image
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int imgRes, long plantId, boolean showWater, int appWidgetId) {
