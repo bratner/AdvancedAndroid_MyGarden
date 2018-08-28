@@ -21,6 +21,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -47,7 +48,11 @@ public class PlantWidgetProvider extends AppWidgetProvider {
             intent = new Intent(context, PlantDetailActivity.class);
             intent.putExtra(PlantDetailActivity.EXTRA_PLANT_ID, plantId);
         }
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+        //PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+        PendingIntent pendingIntent = TaskStackBuilder.create(context)
+                .addNextIntentWithParentStack(intent)
+                .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.plant_widget);
         // Update image
