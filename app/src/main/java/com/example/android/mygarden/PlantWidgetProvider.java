@@ -47,6 +47,12 @@ public class PlantWidgetProvider extends AppWidgetProvider {
 
         views.setPendingIntentTemplate(R.id.widget_grid_view, pi);
 
+
+        Intent showMain = new Intent(context, MainActivity.class);
+        PendingIntent mainPi = TaskStackBuilder.create(context)
+                .addNextIntentWithParentStack(showMain)
+                .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        views.setOnClickPendingIntent(R.id.empty_view, mainPi);
         views.setEmptyView(R.id.widget_grid_view, R.id.empty_view);
         return views;
     }
@@ -99,7 +105,7 @@ public class PlantWidgetProvider extends AppWidgetProvider {
         //views = getSinglePlantRemoteView(context, imgRes, plantId, showWater);
         views = getGardenGridRemoteView(context);
 
-
+        //AppWidgetManager.notifyAppWidgetViewDataChanged(int[], int)
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 

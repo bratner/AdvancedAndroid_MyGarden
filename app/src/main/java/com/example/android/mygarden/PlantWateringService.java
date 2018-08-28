@@ -148,6 +148,8 @@ public class PlantWateringService extends IntentService {
 
         //Grid widget magic. appWidgetManager holds the list of all appwidgets and it will
         appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_grid_view);
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.empty_view);
+
         //Now update all widgets
         PlantWidgetProvider.updatePlantWidgets(this, appWidgetManager, imgRes,plantId ,canWater,appWidgetIds);
     }

@@ -119,6 +119,6 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
 
     @Override
     public boolean hasStableIds() {
-        return true;
+        return false;
     }
 }
