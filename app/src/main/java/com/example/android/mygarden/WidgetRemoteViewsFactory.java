@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -23,6 +24,7 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
 
     Context mContext;
     Cursor mCursor; //holds the list of what to show in the list/grid widget
+    public static final String TAG = WidgetRemoteViewsFactory.class.getSimpleName();
 
     public WidgetRemoteViewsFactory(Context context) {
         mContext = context;
@@ -36,6 +38,7 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
 
     @Override
     public void onDataSetChanged() {
+        Log.d(TAG, "onDataSetChanged()");
         Uri query_uri = PlantContract.BASE_CONTENT_URI.buildUpon().appendPath(PlantContract.PATH_PLANTS).build();
         //we are going to re-query the provider. Stale data can go to /dev/null
         if (mCursor != null)
@@ -47,6 +50,7 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
                 null,
                 PlantContract.PlantEntry.COLUMN_CREATION_TIME //Maybe last watered time?
         );
+        Log.d(TAG, "onDataSetChanged() cursor loaded "+mCursor.getCount()+" entries.");
     }
 
     @Override
@@ -63,6 +67,7 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
 
     @Override
     public RemoteViews getViewAt(int position) {
+        Log.d(TAG, "getViewAt() for position "+position);
         if (mCursor == null || mCursor.getCount() == 0)
             return null;
         mCursor.moveToPosition(position);
@@ -78,9 +83,6 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
         long createdAt = mCursor.getLong(createTimeIndex);
         int plantType = mCursor.getInt(plantTypeIndex);
 
-
-        boolean needsWater = (timeNow - wateredAt) > PlantUtils.MIN_AGE_BETWEEN_WATER &&
-                (timeNow - wateredAt) < PlantUtils.MAX_AGE_WITHOUT_WATER;
         int imgRes = PlantUtils.getPlantImageRes(mContext, timeNow - createdAt, timeNow - wateredAt, plantType);
 
         RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.plant_widget);
@@ -89,7 +91,7 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
         // Update plant ID text
         views.setTextViewText(R.id.widget_plant_name, String.valueOf(plantId));
         // Show/Hide the water drop button
-        if (needsWater) views.setViewVisibility(R.id.widget_water_button, View.VISIBLE);
+        views.setViewVisibility(R.id.widget_water_button, View.GONE);
 
         Bundle params = new Bundle();
         params.putLong(PlantDetailActivity.EXTRA_PLANT_ID, plantId);
@@ -107,16 +109,16 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
 
     @Override
     public int getViewTypeCount() {
-        return 0;
+        return 1;
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     @Override
     public boolean hasStableIds() {
-        return false;
+        return true;
     }
 }

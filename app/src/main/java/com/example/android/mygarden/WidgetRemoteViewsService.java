@@ -2,6 +2,7 @@ package com.example.android.mygarden;
 
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
 import android.widget.RemoteViewsService;
 
 /**
@@ -11,6 +12,7 @@ import android.widget.RemoteViewsService;
 public class WidgetRemoteViewsService extends RemoteViewsService {
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
+        Log.d("WidgetRemoteViewsSer", "onGetViewFactory()");
         return new WidgetRemoteViewsFactory(this.getApplicationContext());
     }
 }
