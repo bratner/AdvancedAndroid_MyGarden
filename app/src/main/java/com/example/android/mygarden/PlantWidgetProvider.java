@@ -97,9 +97,9 @@ public class PlantWidgetProvider extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int imgRes, long plantId, boolean showWater, int appWidgetId) {
 
-        // TODO (4): separate the updateAppWidget logic into getGardenGridRemoteView and getSinglePlantRemoteView
-        // TODO (5): Use getAppWidgetOptions to get widget width and use the appropriate RemoteView method
-        // TODO (6): Set the PendingIntent template in getGardenGridRemoteView to launch PlantDetailActivity
+        // done (4): separate the updateAppWidget logic into getGardenGridRemoteView and getSinglePlantRemoteView
+        // done (5): Use getAppWidgetOptions to get widget width and use the appropriate RemoteView method
+        // done (6): Set the PendingIntent template in getGardenGridRemoteView to launch PlantDetailActivity
         RemoteViews views;
         Bundle options;
 
